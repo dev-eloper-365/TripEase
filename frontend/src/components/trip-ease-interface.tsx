@@ -4,15 +4,13 @@ import React, { useState, useEffect, useRef } from 'react'
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Textarea } from "@/components/ui/textarea"
-import { Switch } from "@/components/ui/switch"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Calendar } from "@/components/ui/calendar"
 import { Input } from "@/components/ui/input"
 import { Menu, MessageSquare, Settings, Sun, Moon, LogOut, Mic } from 'lucide-react'
 import { addDays } from 'date-fns'
 import { useRouter } from 'next/navigation'
-import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { useToast } from "@/hooks/use-toast"
 import { cn } from "@/lib/utils"
@@ -91,34 +89,11 @@ export function TripEaseInterfaceComponent(): JSX.Element {
 
   const router = useRouter()
   const { toast } = useToast()
-  const { theme } = useTheme()
+  const { theme, setTheme } = useTheme()
 
-  // Theme switching implementation
   const toggleTheme = () => {
-    const root = document.documentElement;
-    root.classList.add('theme-transition');
-    
-    if (darkMode) {
-      root.classList.remove('dark');
-      document.body.style.backgroundColor = 'white';
-      setDarkMode(false);
-    } else {
-      root.classList.add('dark');
-      document.body.style.backgroundColor = 'black';
-      setDarkMode(true);
-    }
-
-    // Remove transition class after animation completes
-    setTimeout(() => {
-      root.classList.remove('theme-transition');
-    }, 200);
-  };
-
-  // Set initial dark theme
-  useEffect(() => {
-    document.documentElement.classList.add('dark');
-    document.body.style.backgroundColor = 'black';
-  }, []);
+    setTheme(theme === "dark" ? "light" : "dark")
+  }
 
   useEffect(() => {
     if ('webkitSpeechRecognition' in window) {
@@ -347,22 +322,23 @@ export function TripEaseInterfaceComponent(): JSX.Element {
 
   const simulateBotResponse = async (userMessage: string, chatId: string): Promise<void> => {
     setIsStreaming(true)
-    var botResponse = await generateBotResponse(userMessage)
-    botResponse = botResponse.replace(/^\*\s*(.*)$/gm, '<li>$1</li>')
-    botResponse = `<ul>${botResponse}</ul>`
-    botResponse = botResponse.replace(/\*(.*?)\*/g, '<strong>$1</strong>')
-    botResponse = botResponse.replace(/\n/g, '<br>')
+    const botResponse = await generateBotResponse(userMessage)
+    const formattedResponse = botResponse
+      .replace(/^\*\s*(.*)$/gm, '<li>$1</li>')
+      .replace(/\*(.*?)\*/g, '<strong>$1</strong>')
+      .replace(/\n/g, '<br>')
+    const wrappedResponse = `<ul>${formattedResponse}</ul>`
 
     const newMessage: Message = { id: Date.now().toString(), content: '', role: 'bot', isStreaming: true }
     setMessages(prev => [...prev, newMessage])
 
-    if (botResponse && typeof botResponse === 'string') {
-      for (let i = 0; i < botResponse.length; i++) {
+    if (wrappedResponse && typeof wrappedResponse === 'string') {
+      for (let i = 0; i < wrappedResponse.length; i++) {
         await new Promise(resolve => setTimeout(resolve, 20))
         setMessages(prev =>
           prev.map(msg =>
             msg.id === newMessage.id
-              ? { ...msg, content: botResponse.slice(0, i + 1) }
+              ? { ...msg, content: wrappedResponse.slice(0, i + 1) }
               : msg
           )
         )
@@ -499,7 +475,7 @@ export function TripEaseInterfaceComponent(): JSX.Element {
                 onClick={toggleTheme}
                 className="w-10 h-10 rounded-lg hover:bg-[#ffffff0a] relative flex items-center justify-center"
               >
-                {darkMode ? (
+                {theme === "dark" ? (
                   <Moon className="h-5 w-5" />
                 ) : (
                   <Sun className="h-5 w-5" />
