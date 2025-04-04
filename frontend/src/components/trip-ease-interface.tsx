@@ -14,6 +14,10 @@ import { useRouter } from 'next/navigation'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Separator } from "@/components/ui/separator"
+import { useToast } from "@/hooks/use-toast"
+import { cn } from "@/lib/utils"
+import { Loader2, Send, Plus } from "lucide-react"
+import { useTheme } from "next-themes"
 
 interface IWindow extends Window {
   webkitSpeechRecognition: new () => SpeechRecognition;
@@ -86,6 +90,8 @@ export function TripEaseInterfaceComponent(): JSX.Element {
   const recognition = useRef<SpeechRecognition | null>(null)
 
   const router = useRouter()
+  const { toast } = useToast()
+  const { theme } = useTheme()
 
   // Theme switching implementation
   const toggleTheme = () => {
@@ -173,14 +179,14 @@ export function TripEaseInterfaceComponent(): JSX.Element {
     console.error('API Error:', error);
   };
 
-  async function getInitialChatId(): Promise<void> {
+  async function getInitialChatId(): Promise<string> {
     try {
       const historyResponse = await fetch('http://localhost:3001/chat/gethistory', {
         headers: getAuthHeaders()
       })
       if (!historyResponse.ok) {
         await handleAuthError(historyResponse);
-        return;
+        return "";
       }
       const historyData = await historyResponse.json()
       
@@ -189,6 +195,7 @@ export function TripEaseInterfaceComponent(): JSX.Element {
         setInitialChatId(mostRecentChat._id)
         setSelectedChatId(mostRecentChat._id)
         setChatHistory(historyData.history)
+        return mostRecentChat._id
       } else {
         const newChatResponse = await fetch("http://localhost:3001/chat/newchat", {
           method: "POST",
@@ -196,7 +203,7 @@ export function TripEaseInterfaceComponent(): JSX.Element {
         })
         if (!newChatResponse.ok) {
           await handleAuthError(newChatResponse);
-          return;
+          return "";
         }
         const newChatData = await newChatResponse.json()
         setInitialChatId(newChatData.id)
@@ -207,15 +214,24 @@ export function TripEaseInterfaceComponent(): JSX.Element {
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString()
         }])
+        return newChatData.id
       }
     } catch (error) {
       handleAuthError(error);
+      return "";
     }
   }
 
   useEffect(() => {
-    getInitialChatId()
-  }, [])
+    const initializeChat = async () => {
+      const chatId = await getInitialChatId();
+      if (chatId) {
+        setSelectedChatId(chatId);
+        await loadChatHistory(chatId);
+      }
+    };
+    initializeChat();
+  }, []);
 
   const createNewChat = async (): Promise<void> => {
     try {
@@ -243,7 +259,7 @@ export function TripEaseInterfaceComponent(): JSX.Element {
         setStartDate(undefined)
         setEndDate(undefined)
         setInputMessage('')
-        setInitialChatId(newChat._id)
+        setInitialChatId(data.id)
       }
     } catch (error) {
       handleAuthError(error);
@@ -379,6 +395,27 @@ export function TripEaseInterfaceComponent(): JSX.Element {
     setTo("");
 
     await simulateBotResponse(inputMessage, selectedChatId!)
+  }
+
+  const loadChatHistory = async (chatIdToLoad: string) => {
+    try {
+      const response = await fetch(`http://localhost:3001/chat/getchat?id=${chatIdToLoad}`, {
+        headers: getAuthHeaders()
+      })
+      if (!response.ok) {
+        await handleAuthError(response);
+        return;
+      }
+      const data = await response.json()
+      if (data.status === 200) {
+        setMessages(data.chat.messages.slice(2))
+        setChatHistory(prev => prev.map(chat => 
+          chat._id === chatIdToLoad ? { ...chat, messages: data.chat.messages } : chat
+        ))
+      }
+    } catch (error) {
+      handleAuthError(error);
+    }
   }
 
   return (
