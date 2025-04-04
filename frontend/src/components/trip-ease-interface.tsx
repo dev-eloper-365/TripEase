@@ -15,7 +15,7 @@ import { Separator } from "@/components/ui/separator"
 import { useToast } from "@/hooks/use-toast"
 import { cn } from "@/lib/utils"
 import { Loader2, Send, Plus } from "lucide-react"
-import { useTheme } from "next-themes"
+import { useTheme } from "@/components/theme-provider"
 
 interface IWindow extends Window {
   webkitSpeechRecognition: new () => SpeechRecognition;
