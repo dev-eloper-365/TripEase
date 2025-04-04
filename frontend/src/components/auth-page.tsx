@@ -33,7 +33,7 @@ export function AuthPageComponent() {
   const [displayText, setDisplayText] = useState('')
   
   async function Login(){
-    await fetch("http://localhost:3001/user/login", {
+    await fetch("https://tripease-2alb.onrender.com/user/login", {
       method: "POST",
       body: JSON.stringify({
         email: email,
@@ -71,7 +71,7 @@ export function AuthPageComponent() {
   }
 
   async function Signup(){
-    await fetch("http://localhost:3001/user/signup", {
+    await fetch("https://tripease-2alb.onrender.com/user/signup", {
       method: "POST",
       body: JSON.stringify({
         firstName: firstName,

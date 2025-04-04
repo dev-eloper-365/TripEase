@@ -156,7 +156,7 @@ export function TripEaseInterfaceComponent(): JSX.Element {
 
   async function getInitialChatId(): Promise<string> {
     try {
-      const historyResponse = await fetch('http://localhost:3001/chat/gethistory', {
+      const historyResponse = await fetch('https://tripease-2alb.onrender.com/chat/gethistory', {
         headers: getAuthHeaders()
       })
       if (!historyResponse.ok) {
@@ -172,7 +172,7 @@ export function TripEaseInterfaceComponent(): JSX.Element {
         setChatHistory(historyData.history)
         return mostRecentChat._id
       } else {
-        const newChatResponse = await fetch("http://localhost:3001/chat/newchat", {
+        const newChatResponse = await fetch("https://tripease-2alb.onrender.com/chat/newchat", {
           method: "POST",
           headers: getAuthHeaders()
         })
@@ -210,7 +210,7 @@ export function TripEaseInterfaceComponent(): JSX.Element {
 
   const createNewChat = async (): Promise<void> => {
     try {
-      const response = await fetch('http://localhost:3001/chat/newchat', {
+      const response = await fetch('https://tripease-2alb.onrender.com/chat/newchat', {
         method: 'POST',
         headers: getAuthHeaders()
       })
@@ -248,7 +248,7 @@ export function TripEaseInterfaceComponent(): JSX.Element {
       setMessages(selectedChat.messages.slice(2))
     } else {
       try {
-        const response = await fetch(`http://localhost:3001/chat/getchat?id=${chatId}`, {
+        const response = await fetch(`https://tripease-2alb.onrender.com/chat/getchat?id=${chatId}`, {
           headers: getAuthHeaders()
         })
         if (!response.ok) {
@@ -296,7 +296,7 @@ export function TripEaseInterfaceComponent(): JSX.Element {
 
   const generateBotResponse = async (userMessage: string): Promise<string> => {
     try {
-      const response = await fetch(`http://localhost:3001/chat/send?id=${initialChatId}`, {
+      const response = await fetch(`https://tripease-2alb.onrender.com/chat/send?id=${initialChatId}`, {
         method: "POST",
         headers: getAuthHeaders(),
         body: JSON.stringify({
@@ -375,7 +375,7 @@ export function TripEaseInterfaceComponent(): JSX.Element {
 
   const loadChatHistory = async (chatIdToLoad: string) => {
     try {
-      const response = await fetch(`http://localhost:3001/chat/getchat?id=${chatIdToLoad}`, {
+      const response = await fetch(`https://tripease-2alb.onrender.com/chat/getchat?id=${chatIdToLoad}`, {
         headers: getAuthHeaders()
       })
       if (!response.ok) {
