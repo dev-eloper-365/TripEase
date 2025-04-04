@@ -1,0 +1,170 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Light theme */
+    --background: 0 0% 100%;
+    --foreground: 0 0% 0%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 0%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 0%;
+    --primary: 0 0% 0%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 0 0% 0%;
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 45%;
+    --accent: 0 0% 96%;
+    --accent-foreground: 0 0% 0%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 0 0% 89.8%;
+    --input: 0 0% 89.8%;
+    --ring: 0 0% 0%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 0 0% 0%;
+    --foreground: 0 0% 95%;
+    --card: 0 0% 0%;
+    --card-foreground: 0 0% 95%;
+    --popover: 0 0% 0%;
+    --popover-foreground: 0 0% 95%;
+    --primary: 0 0% 95%;
+    --primary-foreground: 0 0% 0%;
+    --secondary: 0 0% 10%;
+    --secondary-foreground: 0 0% 95%;
+    --muted: 0 0% 10%;
+    --muted-foreground: 0 0% 63.9%;
+    --accent: 0 0% 10%;
+    --accent-foreground: 0 0% 95%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 95%;
+    --border: 0 0% 10%;
+    --input: 0 0% 10%;
+    --ring: 0 0% 83.1%;
+  }
+
+  html {
+    font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    font-style: normal;
+    font-kerning: auto;
+    font-optical-sizing: auto;
+    font-stretch: 100%;
+    font-variation-settings: normal;
+    font-feature-settings: normal;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: inherit;
+  }
+
+  * {
+    @apply border-border;
+  }
+}
+
+/* Typewriter cursor style */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.typewriter-text::after {
+  content: '|';
+  color: #F2F2F2;
+  animation: blink 1s step-end infinite;
+}
+
+/* Scrollbar styles */
+.scrollbar-custom {
+  scrollbar-width: thin;
+  scrollbar-color: #ffffff1a transparent;
+}
+
+.scrollbar-custom::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scrollbar-custom::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-custom::-webkit-scrollbar-thumb {
+  background-color: #ffffff1a;
+  border-radius: 3px;
+}
+
+/* Theme transition */
+.theme-transition * {
+  transition: all 0.2s ease-in-out;
+}
+
+/* Theme icon styles */
+.theme-icon {
+  @apply h-5 w-5;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  position: absolute;
+}
+
+.theme-icon.sun {
+  opacity: 0;
+  transform: scale(0) rotate(90deg);
+}
+
+.theme-icon.moon {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+}
+
+:root[class~="light"] .theme-icon.sun {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+}
+
+:root[class~="light"] .theme-icon.moon {
+  opacity: 0;
+  transform: scale(0) rotate(-90deg);
+}
+
+/* Claude-specific styles */
+.claude-sidebar-item {
+  @apply text-[#F2F2F2] hover:bg-[#ffffff0a] transition-colors duration-200;
+}
+
+.claude-separator {
+  @apply bg-[#ffffff1a];
+}
+
+.claude-button {
+  @apply bg-transparent border border-[#ffffff1a] hover:bg-[#ffffff0a] text-[#F2F2F2];
+}
+
+/* Scrollbar styles for Claude */
+.scrollbar-claude {
+  scrollbar-width: thin;
+  scrollbar-color: #ffffff1a transparent;
+}
+
+.scrollbar-claude::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scrollbar-claude::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-claude::-webkit-scrollbar-thumb {
+  background-color: #ffffff1a;
+  border-radius: 3px;
+}
