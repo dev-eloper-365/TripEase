@@ -1,18 +1,16 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+// next.config.mjs
+export default {
   async headers() {
     return [
       {
-        source: "/(.*)",
+        source: "/(.*)", // Apply to all routes
         headers: [
           {
             key: "Content-Security-Policy",
-            value: "frame-ancestors 'self' https://dev101.framer.website"
+            value: "frame-ancestors *;"
           }
         ]
       }
-    ]
+    ];
   }
 };
-
-export default nextConfig;
