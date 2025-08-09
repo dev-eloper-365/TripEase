@@ -3,19 +3,15 @@ const nextConfig = {
   async headers() {
     return [
       {
-        source: "/(.*)", // Apply to all routes
+        source: "/(.*)",
         headers: [
           {
-            key: "X-Frame-Options",
-            value: "ALLOWALL" // Allow embedding in iframes
-          },
-          {
             key: "Content-Security-Policy",
-            value: "frame-ancestors *" // No iframe restrictions
+            value: "frame-ancestors 'self' https://dev101.framer.website"
           }
         ]
       }
-    ];
+    ]
   }
 };
 
