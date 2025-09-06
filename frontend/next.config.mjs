@@ -1,4 +1,3 @@
-// next.config.mjs
 export default {
   async headers() {
     return [
@@ -8,6 +7,10 @@ export default {
           {
             key: "Content-Security-Policy",
             value: "frame-ancestors *;"
+          },
+          {
+            key: "X-Frame-Options",
+            value: "ALLOWALL"
           }
         ]
       }
