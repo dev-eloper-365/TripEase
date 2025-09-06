@@ -167,3 +167,24 @@
   background-color: #ffffff1a;
   border-radius: 3px;
 }
+
+/* ============================= */
+/* Global Overflow Hidden Options */
+/* ============================= */
+
+/* 1. Hide all scrolling (no scrollbars at all) */
+html, body {
+  overflow: hidden;
+}
+
+/* 2. Alternative: only hide horizontal, allow vertical */
+html.no-x-scroll, body.no-x-scroll {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+/* 3. Alternative: only hide vertical, allow horizontal */
+html.no-y-scroll, body.no-y-scroll {
+  overflow-y: hidden;
+  overflow-x: auto;
+}
