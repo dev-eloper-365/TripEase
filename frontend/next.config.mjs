@@ -2,18 +2,12 @@ export default {
   async headers() {
     return [
       {
-        source: "/(.*)", // Apply to all routes
+        source: "/(.*)",
         headers: [
-          {
-            key: "Content-Security-Policy",
-            value: "frame-ancestors *;"
-          },
-          {
-            key: "X-Frame-Options",
-            value: "ALLOWALL"
-          }
-        ]
-      }
+          { key: "X-Frame-Options", value: "ALLOWALL" },
+          { key: "Content-Security-Policy", value: "frame-ancestors *" },
+        ],
+      },
     ];
-  }
+  },
 };
